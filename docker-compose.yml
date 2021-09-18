@@ -14,3 +14,5 @@ services:
     tty: true
     volumes:
       - ./app:/app
+    environment:
+      TZ: Asia/Tokyo
