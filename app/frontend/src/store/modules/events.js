@@ -7,11 +7,12 @@ const state = {
 };
 
 const getters = {
-  events: state => state.events.map(event => {
+  events: (state) =>
+  state.events.map((event) => {
     return {
       ...event,
       start: new Date(event.start),
-      end: new Date(event.end)
+      end: new Date(event.end),
     };
   }),
 };
@@ -23,7 +24,7 @@ const mutations = {
 const actions = {
   async fetchEvents({ commit }) {
     const response = await axios.get(`${apiUrl}/events`);
-    commit("setEvents", response.data); // mutationを呼び出す
+    commit("setEvents", response.data); 
   },
 };
 
