@@ -9,6 +9,15 @@
       <DialogSection icon="mdi-square" :color="event.color || 'blue'">
         <v-text-field v-model="name" label="タイトル"></v-text-field>
       </DialogSection>
+      <DialogSection icon="mdi-clock-outline">
+        <v-date-picker
+          v-model="startDate"
+          no-title
+          locale="ja-ja"
+          :day-format="(startDate) => new Date(startDate).getDate()"
+        ></v-date-picker>
+        <p>{{ startDate }}</p>
+      </DialogSection>
     </v-card-text>
     <v-card-actions class="d-flex justify-end">
       <v-btn @click="submit">保存</v-btn>
@@ -17,22 +26,23 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import DialogSection from './DialogSection';
+import { mapGetters, mapActions } from "vuex";
+import DialogSection from "./DialogSection";
 
 export default {
-  name: 'EventFormDialog',
+  name: "EventFormDialog",
   components: {
     DialogSection,
   },
   data: () => ({
-    name: '',
+    name: "",
+    startDate: null,
   }),
   computed: {
-    ...mapGetters('events', ['event']),
+    ...mapGetters("events", ["event"]),
   },
   methods: {
-    ...mapActions('events', ['setEvent', 'setEditMode', 'createEvent']),
+    ...mapActions("events", ["setEvent", "setEditMode", "createEvent"]),
     closeDialog() {
       this.setEditMode(false);
       this.setEvent(null);
@@ -40,7 +50,7 @@ export default {
     submit() {
       const params = {
         name: this.name,
-        start: this.event.start,
+        start: this.startDate,
         end: this.event.end,
       };
       this.createEvent(params);
