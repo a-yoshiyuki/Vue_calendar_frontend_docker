@@ -37,7 +37,8 @@
 import { format } from "date-fns";
 import { mapGetters, mapActions } from "vuex";
 import EventDetailDialog from "./EventDetailDialog";
-import EventFormDialog from './EventFormDialog';
+import EventFormDialog from "./EventFormDialog";
+import { getDefaultStartAndEnd } from "../functions/datetime";
 
 export default {
   name: "Calendar",
@@ -49,13 +50,13 @@ export default {
     value: format(new Date(), "yyyy/MM/dd"),
   }),
   computed: {
-    ...mapGetters('events', ['events', 'event', 'isEditMode']),
+    ...mapGetters("events", ["events", "event", "isEditMode"]),
     title() {
       return format(new Date(this.value), "yyyy年 M月");
     },
   },
   methods: {
-    ...mapActions('events', ['fetchEvents', 'setEvent', 'setEditMode']),
+    ...mapActions("events", ["fetchEvents", "setEvent", "setEditMode"]),
     setToday() {
       this.value = format(new Date(), "yyyy/MM/dd");
     },
@@ -68,10 +69,9 @@ export default {
       this.setEditMode(false);
     },
     initEvent({ date }) {
-      date = date.replace(/-/g, '/');
-      const start = format(new Date(date), 'yyyy/MM/dd 00:00:00')
-      const end = format(new Date(date), 'yyyy/MM/dd 01:00:00')
-      this.setEvent({ name: '', start, end, timed: true });
+      date = date.replace(/-/g, "/");
+      const [start, end] = getDefaultStartAndEnd(date);
+      this.setEvent({ name: "", start, end, timed: true });
       this.setEditMode(true);
     },
   },
