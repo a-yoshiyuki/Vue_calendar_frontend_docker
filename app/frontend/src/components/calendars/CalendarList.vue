@@ -18,6 +18,7 @@
             v-model="calendar.visibility"
             :color="calendar.color"
             :label="calendar.name"
+            @click="toggleVisibility(calendar)"
             class="pb-2"
             hide-details="true"
           ></v-checkbox>
@@ -37,33 +38,42 @@
         </v-list-item-action>
       </v-list-item>
     </v-list-item-group>
-    <v-dialog :value="calendar !== null" @click:outside="closeDialog" width="600">
+    <v-dialog
+      :value="calendar !== null"
+      @click:outside="closeDialog"
+      width="600"
+    >
       <CalendarFormDialog v-if="calendar !== null" />
     </v-dialog>
   </v-list>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import CalendarFormDialog from './CalendarFormDialog';
+import { mapActions, mapGetters } from "vuex";
+import CalendarFormDialog from "./CalendarFormDialog";
 
 export default {
-  name: 'CalendarList',
+  name: "CalendarList",
   components: { CalendarFormDialog },
   data: () => ({
     selectedItem: null,
   }),
   computed: {
-    ...mapGetters('calendars', ['calendars', 'calendar']),
+    ...mapGetters("calendars", ["calendars", "calendar"]),
   },
   created() {
     this.fetchCalendars();
   },
   methods: {
-    ...mapActions('calendars', ['fetchCalendars', 'deleteCalendar', 'setCalendar']),
+    ...mapActions("calendars", [
+      "fetchCalendars",
+      "updateCalendar",
+      "deleteCalendar",
+      "setCalendar",
+    ]),
     initCalendar() {
       this.setCalendar({
-        name: '',
+        name: "",
         visibility: true,
       });
     },
@@ -75,6 +85,9 @@ export default {
     },
     del(calendar) {
       this.deleteCalendar(calendar.id);
+    },
+    toggleVisibility(calendar) {
+      this.updateCalendar(calendar);
     },
   },
 };
