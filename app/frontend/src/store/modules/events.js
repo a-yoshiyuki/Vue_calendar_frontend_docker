@@ -1,5 +1,5 @@
 import axios from "axios";
-import { isDateWithinInterval } from '../../functions/datetime';
+import { isDateWithinInterval, compareDates } from '../../functions/datetime';
 import { serializeEvent } from '../../functions/serializers';
 
 const apiUrl = "http://localhost:3000";
@@ -17,7 +17,8 @@ const getters = {
   dayEvents: state =>
     state.events
       .map(event => serializeEvent(event))
-      .filter(event => isDateWithinInterval(state.clickedDate, event.startDate, event.endDate)),
+      .filter(event => isDateWithinInterval(state.clickedDate, event.startDate, event.endDate))
+      .sort(compareDates),
   isEditMode: state => state.isEditMode,
   clickedDate: state => state.clickedDate,
 };
